@@ -1,0 +1,80 @@
+---------------------------------------------------xpath----------------------------------------------------------------
+In : %%writefile hrk1.xml
+<?xml version="1.0" encoding="utf-8"?>
+<wikimedia>
+  <projects>
+    <project name="Wikipedia" launch="2001-01-05">
+      <editions>
+        <edition language="English">en.wikipedia.org</edition>
+           </editions>
+    </project>
+    <project name="Wiktionary" launch="2002-12-12">
+      <editions>
+        <edition language="English">en.wiktionary.org</edition>
+              </editions>
+    </project>
+  </projects>
+</wikimedia>
+
+In :import xml.etree.ElementTree as ET
+tree=ET.parse('hrk1.xml')
+root=tree.getroot()
+print root
+
+In : import lxml
+import lxml.etree
+
+tree=lxml.etree.parse('hrk1.xml')
+root=tree.getroot()
+
+In :for i in root.getiterator():
+    print i.tag, i.attrib
+
+In :f=open('hrk1.xml')
+hrk1xml=f.read()
+f.close()
+
+In :print type(hrk1xml)
+
+In :print hrk1xml
+
+In :import xml.etree.ElementTree as ET
+root=ET.fromstring(hrk1xml)
+for i in root.getiterator():
+    print i.tag, i.attrib
+
+In :import lxml
+import lxml.etree
+
+tree=lxml.etree.parse('hrk1.xml')
+root=tree.getroot()
+
+In :import StringIO
+tree=lxml.etree.parse(StringIO.StringIO(hrk1xml))
+context=lxml.etree.iterparse(StringIO.StringIO(hrk1xml))
+
+In :type(context)
+--------------------------------------------------------cssseletor-------------------------------------------------------------
+In :import lxml.html
+from lxml.cssselect import CSSSelector
+sel = CSSSelector('wikimedia')
+results = sel(tree)
+print type(results),len(results)
+
+In :for each in results:
+    print lxml.html.tostring(each)	
+---------------------------------------------------------regex------------------------------------------------------------------
+In : import urllib
+response = urllib.urlopen('http://www.naver.com/')
+hrk2 = response.read()
+print response.info()
+print len(hrk2)
+
+In : import re
+p=re.compile('href="(http://.*?)"')
+res=p.findall(hrk2)
+print "http url¿∫ ∏Ó ∞≥?",len(res)
+for item in res:
+    print item	
+
+
