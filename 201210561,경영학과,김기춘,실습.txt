@@ -1,0 +1,86 @@
+In [] :%%writefile ds_web_data_hello_scrapy.py
+	import scrapy
+
+class myItem(scrapy.item.Item):
+    title = scrapy.item.Field()
+
+class myCrawler(scrapy.spiders.CrawlSpider):
+    name = 'myAppName'
+    start_urls = ['https://data.go.kr']
+    def parse(self, response):
+        item = myItem()
+        #title = scrapy.selector.Selector(response).xpath('//title/text()')
+        title = scrapy.selector.Selector(response).css('title').extract()
+        print "---Hello---", title
+        item['title']=title
+        return item
+
+In [] :scrapy runspider src/ds_web_data_hello_scrapy.py
+
+In [] :import lxml.html
+       from lxml.cssselect import CSSSelector
+
+In [] :html=lxml.html.fromstring(mydata)
+
+In [] :sel = CSSSelector('#content > div:nth-child(4) \
+    > div._tracklist_mytrack.tracklist_table.tracklist_type1._searchTrack \
+    > table > tbody > tr > td.name > a.title')
+
+In [] :results=sel(html)
+
+In [] :for item in results:
+    	print item.text_content()
+
+In [] :sel = CSSSelector('table[summary] > tbody > ._tracklist_move > .name > a.title')
+
+In [] :results=sel(html)
+
+In [] :_selName = CSSSelector('.name > a.title')
+	_selArtist = CSSSelector('._artist.artist')
+	_selAlbum= CSSSelector('.album > a')
+	for item in results:
+    #print lxml.html.tostring(item)
+    _name=_selName(item)
+    _artist=_selArtist(item)
+    _album=_selAlbum(item)
+    if _name:
+        print _artist[0].text_content().strip(),
+        print "---",
+        print _name[0].text_content(),
+        print "---",
+        print _album[0].text_content()
+-----------------------------------------------국제 학회 크롤링하기-----------------------------------------
+
+In [] : import json
+	import urllib
+
+In [] : ipdata=urllib.urlopen('http://freegeoip.net/json/')
+
+In [] : ipdata.read()
+
+In [] : def getCountry(ipAddress):
+    response = urllib.urlopen("http://freegeoip.net/json/"+ipAddress).read().decode('utf-8')
+    responseJson = json.loads(response)
+    return responseJson.get("country_code")
+
+In [] :print(getCountry("39.118.87.152"))
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
+
+In [] :
